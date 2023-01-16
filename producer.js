@@ -10,8 +10,13 @@ producer.on('delivery-report', function (err, report) {
 });
 producer.on('ready', function () {
     console.log('Producer is ready');
-    producer.produce('new-topic', 0, Buffer.from('Hello Neha Singh'), "Stormwind");
-    producer.produce('new-topic', 1, Buffer.from('Hello Ritul Singh'), "Stormwind");
+    let i = 1;
+    while (20 >= i) {
+        producer.produce('new-topic', 0, Buffer.from(`Hello Neha Singh ${i}`));
+        i++;
+    }
+    // producer.produce('new-topic', 0, Buffer.from('Hello Neha Singh'), "Stormwind");
+    // producer.produce('new-topic', 1, Buffer.from('Hello Ritul Singh'), "Stormwind");
     // producer.produce('new-topic', 2, Buffer.from('Hello Nehaaaaaaaaaaaaaaa Singh'), "Stormwind");
 });
 producer.on('event.error', (err) => {
