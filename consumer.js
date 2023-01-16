@@ -2,12 +2,12 @@ const kafka = require('node-rdkafka');
 
 const consumer1 = new kafka.KafkaConsumer({
     "metadata.broker.list": "127.0.0.1:9092",
-    "group.id": "hello-group2",
+    "group.id": "hello-group1",
     "auto.offset.reset": "earliest"
 });
 const consumer2 = new kafka.KafkaConsumer({
     "metadata.broker.list": "127.0.0.1:9092",
-    "group.id": "hello-group1",
+    "group.id": "hello-group2",
     "auto.offset.reset": "earliest"
 });
 
@@ -17,15 +17,7 @@ const consumer3 = new kafka.KafkaConsumer({
     "auto.offset.reset": "earliest"
 });
 
-consumer2.on("ready", function () {
-    console.log("received message 2....................")
-    consumer2.subscribe(['new-topic']);
-    consumer2.consume();
-}).on('data', function (data) {
-    console.log(data.partition, " 2");
-    console.log('Received message from Consumer 2: ' + data.value);
-    consumer2.commit(data);
-});
+// Consumer 1
 consumer1.on("ready", function () {
     consumer1.subscribe(['new-topic']);
     consumer1.consume()
@@ -35,9 +27,19 @@ consumer1.on("ready", function () {
     console.log('Received message from Consumer 1:', data.value.toString());
     consumer1.commit(data);
 });
-consumer1.on('event.log', function (log) {
-    console.log("Consumer log ", log);
+
+//Consumer 2
+consumer2.on("ready", function () {
+    console.log("received message 2....................")
+    consumer2.subscribe(['new-topic']);
+    consumer2.consume();
+}).on('data', function (data) {
+    console.log(data.partition, " 2");
+    console.log('Received message from Consumer 2: ' + data.value);
+    consumer2.commit(data);
 });
+
+//Consumer 3
 consumer3.on("ready", function () {
     console.log("received message 3....................")
     consumer3.subscribe(['new-topic']);
